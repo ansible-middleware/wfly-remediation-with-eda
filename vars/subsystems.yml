@@ -1,0 +1,5 @@
+---
+wildfly_enable_yml_config: True
+wildfly_yml_configs:
+  - wildfly_config.yml.j2
+  - datasources.yml.j2
