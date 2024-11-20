@@ -1,4 +1,4 @@
-# Deploying WildFly applications to bare-metal and the cloud
+# WildFly remediation with Event-Driven Ansible
 
 ```
  __    __ _ _     _  __ _
@@ -9,7 +9,7 @@
                           |___/
 ```
 
-## Widfly Mini Conference 06/03/2024
+## Widfly Mini Conference 20/11/2024
 ## Romain "Belaran" Pelisse, Senior Software Engineer @Red Hat
 ## Presented using [Slides](https://github.com/maaslalani/slides)
 ---
@@ -18,44 +18,31 @@
 * **Open Source** enthousiast for all my career
 * Works for Red Hat since 2011
 * Works in Open Source and JBoss ecosystem since 2005
+    * Started with JBoss AS 3.25 👴👴👴
 * Passionate about Linux and **Automation** (since 2011)
     * started with Puppet, feel in love with [Ansible](https://www.ansible.com/)
+    * since 2019 leading an initiative to integrate Red Hat Runtimes into Ansible
+        * [Ansible Middleware](https://github.com/ansible-middleware/)
 ```
+
      ___      .__   __.      _______. __  .______    __       _______
     /   \     |  \ |  |     /       ||  | |   _  \  |  |     |   ____|
    /  ^  \    |   \|  |    |   (----`|  | |  |_)  | |  |     |  |__
   /  /_\  \   |  . `  |     \   \    |  | |   _  <  |  |     |   __|
  /  _____  \  |  |\   | .----)   |   |  | |  |_)  | |  `----.|  |____
 /__/     \__\ |__| \__| |_______/    |__| |______/  |_______||_______|
+
 ```
+* If you know what [Shadowrun](https://www.catalystgamelabs.com/brands/shadowrun) is, you might know me for something else...
 
 ---
-# In your shoes
+# Last time, on Wildfly Mini Conf...
 
-* Don't care about latest Wildfly features (unless it helps)
-* Updating means extra works
-* Your Wildfly is not the one coming out of the box
-```
-     _________
-    / ======= \
-   / __________\
-  | ___________ |
-  | | -       | |
-  | |         | |
-  | |_________| |________________________
-  \=____________/                        )
-  / """"""""""" \                       /
- / ::::::::::::: \                  =D-'
-(_________________)
-```
----
-# Ansible
-
-* Not Java, but Open Source and Python so still cross-platform
-* Not a script or yet another language to learn
-* Just a YAML descriptor:
-
-```
+* We saw how to install Wildfly in fully automated fashion using **Ansible**.
+* What is Ansible?
+    * An Open Source, python based and crossplatform automation solution
+    * No code, but YAML descriptor:
+```yml
 - name: "An Ansible playbook to setup SSHd"
   hosts: localhost
   vars:
@@ -72,29 +59,105 @@
 ```
 
 ---
-# Demo
+# Demo 0 - Installing Wildfly with Ansible
 
-Let's run a quick demo...
+
+```
+     _________
+    / ======= \
+   / __________\
+  | ___________ |
+  | | -       | |
+  | |         | |
+  | |_________| |________________________
+  \=____________/                        )
+  / """"""""""" \                       /
+ / ::::::::::::: \                  =D-'
+(_________________)
+```
+---
+# Going further... Event-Driven Ansible!
+
+## The power of automation
+* Now, we have an **automation infrastructure** that will keep our deployment in the proprer **state**
+* Let's leverage this to implements **remediation** using **Event-Driven Ansible** (EDA)
+
+## What is EDA?
+* one
+* two
+* three
 
 ---
-# Wildfly in YOUR organization
+# Demo 1 - Restart Wildfly is server is down
 
-## Running on Open JDK 17
-## Wildfly's configuration based on **standalone-full.xml**
-## Using Postgres as a datasource
-## Logging tuning for **arjuna**
-## Add a system property to id the Wildfly instance called **JBOSS_ID**
+* Let's write a simple **rulebook** to leverage Event Driven Ansible (EDA) to automatically restart Wildfly if it's no longer running...
 
+* (simple use case, but we do need to start somewhere...)
+
+```
+
+
+
+                                                 _______
+                                                |.-----.|
+                                                ||x . x||
+                                                ||_.-._||
+                                                `--)-(--`
+                                               __[=== o]___
+                                              |:::::::::::|\
+                                        jgs   `-=========-`()
+```
 ---
-# Back to the demo
+# Demo 2 - Restart on Java Out of Memory!
 
-Let's see how we implement all of that in our automation!
+* Restarting Wildfly if it's down is nice, but we can do far more than that.
+* Historically, Java apps were sometimes plagued by out of memory errors, that required a restart
+* Let's implement a **remediation strategy**, using EDA, for this common problem
 
+```
+
+
+
+
+                                            _.-^^---....,,--
+                                        _--                  --_
+                                       <                        >)
+                                       |                         |
+                                        \._                   _./
+                                           ```--. . , ; .--'''
+                                                 | |   |
+                                              .-=||  | |=-.
+                                              `-=#$%&%$#=-'
+                                                 | ;  :|
+                                        _____.,-#%&$@%#&#~,._____
+```
 ---
-# Cloud and bare metal
+# Demo 3 - Flush db connection if the app reports idle connection
+* An app has a bug leading to leave some db connection idled
+* The bug has not yet been identified (or the fix is not released)
+* An easy fix is to flush the idle db pool when the problem is detected
+* Let's implement that remediation strategy with EDA
+---
+# Demo 4 - Undeploy a broken app
+* An app can be broken and when it is, it has to be removed
+* And unregister from the web balancer (not in the demo)
+* Wildfly state must check after app removal
+---
+# Thanks!
 
-## Works on **bare metal** and on the **cloud(s)**
-## Kubernetes level of **comfort**
-## Where **DevOps** starts!
-## **Day 2**, rolling updates and rollback
-## Automate even further with **EDA**
+```
+
+
+
+
+
+                                         _______      __      _______
+                                        (  ___  )    /__\    (  ___  )
+                                        | (   ) |   ( \/ )   | (   ) |
+                                        | |   | |    \  /    | (___) |
+                                        | |   | |    /  \/\  |  ___  |
+                                        | | /\| |   / /\  /  | (   ) |
+                                        | (_\ \ |  (  \/  \  | )   ( |
+                                        (____\/_)   \___/\/  |/     \|
+```
+
