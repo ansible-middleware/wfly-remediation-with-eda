@@ -1,0 +1,35 @@
+---
+- name: Ensure Wildfly is install and running as a service
+  hosts: all
+  collections:  # extensions for Ansible
+    - middleware_automation.wildfly
+  roles:
+    - wildfly_install
+    - wildfly_systemd
+  vars:
+    wildfly_systemd_java_home: /usr/lib/jvm/java-17-openjdk
+    postgres_driver_version: 9.4.1212
+    wildfly_version: 34.0.0.Final
+    wildfly_install_use_prospero: False
+    wildfly_install_user: wildfly
+    wildfly_install_group: wildfly
+    wildfly_install_skip_prereqs: True
+    wildfly_apps:
+      - { root: 'edapp', path: 'edapp-1.2.war' }
+  pre_tasks:
+    # This will make sense later on ;) 
+    - ansible.builtin.include_tasks: undeploy_app.yml
+  tasks:
+    - name: Install driver with wildfly_driver role
+      ansible.builtin.include_role:
+        name: wildfly_driver
+      vars:
+        wildfly_driver_module_name: "{{ item.name }}"
+        wildfly_driver_version: "{{ item.version }}"
+        wildfly_driver_jar_filename: "{{ item.jar_file }}"
+        wildfly_driver_jar_url: "{{ item.url }}"
+      loop:
+        - { version: "{{ postgres_driver_version }}",
+            name: 'org.postgresql',
+            jar_file: "postgresql-{{ postgres_driver_version }}.jar",
+            url: "https://repo.maven.apache.org/maven2/org/postgresql/postgresql/{{ postgres_driver_version }}/postgresql-{{ postgres_driver_version }}.jar" }

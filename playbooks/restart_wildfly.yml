@@ -1,0 +1,8 @@
+---
+- name: Ensure Wildfly is install and running as a service
+  hosts: all
+  tasks:
+    - name: Restart Wildfly
+      ansible.builtin.service:
+        name: wildfly
+        state: restarted

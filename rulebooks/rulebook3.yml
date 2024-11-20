@@ -1,0 +1,15 @@
+---
+- name: Check webserver
+  hosts: all
+  sources:
+    - ansible.eda.journald:
+        match: ALL
+
+  rules:
+    - name: Match all on journald
+      condition: event.journald.message is search("pool error Timeout waiting for idle object", ignorecase=false)
+      action:
+        run_playbook:
+          name: playbooks/flush_db.yml
+          extra_vars:
+            log_entry: "{{ event.journald.message }}"

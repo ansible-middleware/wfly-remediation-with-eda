@@ -1,0 +1,4 @@
+- ansible.builtin.import_playbook: /work/playbooks/demo.yml
+  vars:
+    wildfly_apps: []
+    broken_app: edapp-1.2.war

@@ -1,0 +1,19 @@
+---
+- name: "Hello Out of Memory Error!"
+  hosts: all
+  collections:
+    - middleware_automation.wildfly
+  tasks:
+    - ansible.builtin.debug:
+        var: log_entry
+
+    - name: Flush idle connection
+      ansible.builtin.include_role:
+        name: wildfly_utils
+        tasks_from: jboss_cli.yml
+      vars:
+        jboss_cli_query: "/subsystem=datasources/data-source=ExampleDS:flush-idle-connection-in-pool()"
+
+    - name: Display JBoss CLI query results
+      ansible.builtin.debug:
+        var: cli_result 

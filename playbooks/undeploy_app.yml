@@ -1,0 +1,14 @@
+---
+- block:
+    - name: Undeploy EDA apps
+      ansible.builtin.include_role:
+        name: wildfly_utils
+        tasks_from: jboss_cli.yml
+      vars:
+        jboss_cli_query: "'undeploy {{ broken_app }}'"
+    
+    - name: Display JBoss CLI query results
+      ansible.builtin.debug:
+        var: cli_result 
+  when:
+    - wildfly_apps | length < 1

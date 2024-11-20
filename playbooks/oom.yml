@@ -1,0 +1,11 @@
+---
+- name: "Hello Out of Memory Error!"
+  hosts: all
+  tasks:
+    - ansible.builtin.debug:
+        var: log_entry
+
+    - name: Restart Wildfly
+      ansible.builtin.service:
+        name: wildfly
+        state: restarted
